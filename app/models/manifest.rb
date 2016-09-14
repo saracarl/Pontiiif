@@ -6,4 +6,6 @@ class Manifest
   attribute :description, String
   attribute :license,     String
   attribute :navDate,     Date
+  attribute :lastIndexedDate, Date
+  attribute :metadata, String
 end

@@ -1,34 +1,53 @@
 module CrawlerHelper
   
   def self.ingest_manifest(manifest)
-  	connection = open(manifest, :allow_redirections => :safe)
-    manifest_json = connection.read
     begin
-	    service = IIIF::Service.parse(manifest_json)
-	rescue StandardError=>e
-		# get domain of manifest
-		host = URI.parse(manifest).host.downcase
-		# open log file per domain
-		File.open(host + ".log", "a") do |log|
-			log.puts (manifest + " manifest is incorrectly formatted")
-			log.puts "Error: #{e}"
-		end
-	else
-    new_manifest = Manifest.new
-		new_manifest.manifest_id = service['@id']
-    new_manifest.label = service.label
-    	if service.description
-	    	new_manifest.description = service.description
-    	end
-    	if service.license
-	    	new_manifest.license = service.license
-	    end
-    	if service["navDate"]
-    		new_manifest.navDate = service["nav_date"]
-    	end
-      new_manifest.save
-	end
+  	 connection = open(manifest, :allow_redirections => :safe)
+    rescue StandardError=>e
+      # get domain of manifest
+      host = URI.parse(manifest).host.downcase
+      # open log file per domain
+      File.open(host + ".log", "a") do |log|
+        log.puts ("Can't open manifest at " + manifest)
+        log.puts "Error: #{e}"
+      end
+    else
+      manifest_json = connection.read
+      parse_manifest(manifest, manifest_json) 
+    end
   end
+
+  def self.parse_manifest(manifest, manifest_json)
+    begin
+      service = IIIF::Service.parse(manifest_json)
+    rescue StandardError=>e
+      # get domain of manifest
+      host = URI.parse(manifest).host.downcase
+      # open log file per domain
+      File.open(host + ".log", "a") do |log|
+        log.puts (manifest + " manifest is incorrectly formatted")
+        log.puts "Error: #{e}"
+      end
+    else
+      new_manifest = Manifest.new
+      new_manifest.manifest_id = service['@id']
+      new_manifest.label = service.label
+      if service.description
+        new_manifest.description = service.description
+      end
+      if service.license
+        new_manifest.license = service.license
+      end
+      if service["navDate"]
+        new_manifest.navDate = service["nav_date"]
+      end
+      if service["metadata"]
+        new_manifest.metadata = service["metadata"]
+      end
+      new_manifest.lastIndexedDate = DateTime.now
+      new_manifest.save
+    end
+  end   
 
   def self.ingest_collection(collection)
   	connection = open(collection)
