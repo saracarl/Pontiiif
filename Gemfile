@@ -40,4 +40,7 @@ gem 'spring',        group: :development
 
 gem 'iiif-presentation', :git => 'git://github.com/benwbrum/osullivan.git', :branch => 'development'
 gem 'pry'
+gem 'pry-byebug'
 gem 'open_uri_redirections'
+gem "elasticsearch-persistence", require: 'elasticsearch/persistence/model'
+gem "rspec-rails", group: [:development, :test]

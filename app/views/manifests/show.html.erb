@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Manifest:</strong>
+  <%= @manifest.manifest_id %>
+</p>
+
+<p>
+  <strong>Label:</strong>
+  <%= @manifest.label %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @manifest.description %>
+</p>
+
+<p>
+  <strong>License:</strong>
+  <%= @manifest.license %>
+</p>
+
+<p>
+  <strong>Navdate:</strong>
+  <%= @manifest.navDate %>
+</p>
+
+<%= link_to 'Edit', edit_manifest_path(@manifest) %> |
+<%= link_to 'Back', manifests_path %>

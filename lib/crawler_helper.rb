@@ -14,17 +14,19 @@ module CrawlerHelper
 			log.puts "Error: #{e}"
 		end
 	else
-		puts("service id is " + service['@id'])
-    	puts("service.label is " + service.label)
+    new_manifest = Manifest.new
+		new_manifest.manifest_id = service['@id']
+    new_manifest.label = service.label
     	if service.description
-	    	puts("service.description is " + service.description)
+	    	new_manifest.description = service.description
     	end
     	if service.license
-	    	puts("service.license is " + service.license)
+	    	new_manifest.license = service.license
 	    end
     	if service["navDate"]
-    		puts("service.navDate is " + service["nav_date"])
+    		new_manifest.navDate = service["nav_date"]
     	end
+      new_manifest.save
 	end
   end
 
