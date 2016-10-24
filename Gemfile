@@ -44,3 +44,6 @@ gem 'pry-byebug'
 gem 'open_uri_redirections'
 gem "elasticsearch-persistence", require: 'elasticsearch/persistence/model'
 gem "rspec-rails", group: [:development, :test]
+gem 'elasticsearch-dsl'
+gem 'bootstrap-sass', '~> 3.2.0'
+gem 'autoprefixer-rails'

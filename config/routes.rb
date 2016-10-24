@@ -1,7 +1,16 @@
 Rails.application.routes.draw do
+  resources :collections
+
   get   '/search' => 'manifests#search'
-  get   '/manifests/searchresults' => 'manifests#searchresults'
+  get   '/searchresults' => 'manifests#searchresults'
+  get   'advancedsearch' => 'manifests#advancedsearch'
+  get   '/manifests/addcollection' => 'manifests#addcollection'
+  get   '/collection/new'
   resources :manifests
+  get   '/advanced_search' => 'manifests#advanced_search', :as => "advanced_search"
+  get   '/list_logs' => 'log_files#list_logs', :as => "list_logs"
+  get   '/log_files/:logfile', to: 'log_files#show', :as => "logfile"
+ # get #'/patients/:id', to: 'patients#show', as: 'patient'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

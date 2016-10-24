@@ -1,4 +1,8 @@
+require 'elasticsearch/dsl'
+require 'crawler_helper'
+
 class ManifestsController < ApplicationController
+  include Elasticsearch::DSL
   #before_action :set_manifest, only: [:show, :edit, :update, :destroy]
 
   # GET /manifests
@@ -21,18 +25,70 @@ class ManifestsController < ApplicationController
   def edit
   end
 
-    # GET /manifests/search
-  def search
-    @manifests = Manifest.all
+    #GET /manifests/search
+   def search
+     render action: "search"
+   end
 
+  def addcollection
+    #CrawlerHelper.ingest_collection(params[:collection])
+    #render action: "search"
+
+    rake_call = "rake pontiiif:ingest_collection[" + params[:collection] +"]  --trace 2>&1 >> rake_log.log &"
+    logger.info rake_call
+    system(rake_call)
     render action: "search"
+  end
+
+  def advancedsearch
+    must_array=[]
+    if !params["label"].blank? then 
+      label_match = {match: {label: params["label"]}} 
+      must_array << label_match 
+    end
+    if !params["description"].blank? then 
+      description_match = {match: {description: params["description"]}} 
+      must_array << description_match
+    end
+    # if just a startDate, treat it as starting on jan 1 and going through the year
+    # if just an endDate, same
+    # if both...
+    if !params["startDate"].blank? && !params["endDate"].blank? then
+      startTime = Time.new(params["startDate"]).utc
+      endTime = Time.new(params["endDate"]).utc
+      endTime=endTime+1.year
+      date_range = {range: {navDate: {"gte": startTime, "lte": endTime}}} 
+      must_array << date_range
+    end
+    #startDate no endDate
+    if !params["startDate"].blank? && params["endDate"].blank? then
+      startTime = Time.new(params["startDate"]).utc
+      date_range = {range: {navDate: {"gte": startTime}}} 
+      must_array << date_range
+    end
+    #endDate no startDate
+    if params["startDate"].blank? && !params["endDate"].blank? then
+      endTime = Time.new(params["endDate"]).utc
+      endTime=endTime+1.year
+      date_range = {range: {navDate: {"lte": endTime}}} 
+      must_array << date_range
+    end
+    #TODO if params["endDate"] then endDate =
+    # probably need to make sure the above actually has an endDate
+    # if only one date, use for both start and end date?  or go to "beginning" and "current time"? 
+    if !params["metadata"].blank? then 
+      metadata_match = {match: {metadata: params["metadata"]}} 
+      must_array << metadata_match
+    end
+    bool_clause = {bool: {must: must_array}}
+    query = {query: bool_clause}
+    @manifests = Manifest.search(query)
+    render action: "index"
   end
 
   # GET /manifests/search
   def searchresults
-    #binding.pry
     @manifests = Manifest.search(params[:q])
-
     render action: "index"
   end
 

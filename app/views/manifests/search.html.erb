@@ -1,46 +1,79 @@
-<h1>Searching manifests</h1>
+<%= render "navbar" %>
 
-  <hr>
+<div id="main-container" class="container">
 
-  <%= form_tag 'manifests/searchresults', method: 'get' do %>
-    <%= label_tag :query %>
-    <%= text_field_tag :q, params[:q] %>
-    <%= submit_tag :search %>
+      <div class="row">
+      <div class="col-md-8">
+<h1>Search manifests</h1>
+
+<div class="field form-group">
+  <%= form_tag searchresults_path, class: 'form-horizontal', method: 'get' do %>
+    <div class="col-sm-10">
+      <%= text_field_tag :q, params[:q], placeholder: "Bronte or purple or Bronte purple", class: 'form-control' %>
+      <%= submit_tag :searchresults, class: 'btn btn-primary' %>
+      </div>
   <% end %>
 
-  <hr>
+</div>
+</div>
+</div>
+
+<!--
+<div class="row">
+<div class="col-md-8">
+<div class="field form-group">
+<h3>Advanced Search</h3>
+
+  <%= form_tag 'advancedsearch', method: 'get' do %>
+    <div class="form-group">
+    <%= label_tag :label %>
+    <%= text_field_tag :label, params[:label], class: 'form-control' %>
+    </div>
+    <div class="form-group">
+    <%= label_tag :description %>
+    <%= text_field_tag :description, params[:description], class: 'form-control' %>
+        </div>
+    <div class="form-group">
+    <%= label_tag :metadata %>
+    <%= text_field_tag :metadata, params[:metadata], class: 'form-control' %>
+        </div>
+    <div class="form-group">    
+    <%= label_tag :license %>
+    <%= text_field_tag :license, params[:license], class: 'form-control' %>
+        </div>
+    <div class="form-group">
+    <%= label_tag :start_Date %>
+    <%= text_field_tag :startDate, params[:startDate], class: 'form-control' %>
+        </div>
+    <div class="form-group">
+    <%= label_tag :end_Date %>
+    <%= text_field_tag :endDate, params[:endDate], class: 'form-control' %>
+        </div>
+    <%= submit_tag :advancedsearch , class: 'btn btn-default' %>
+  <% end %>
+  </div>
+  </div>
+  </div>
+
+      <div class="row">
+      <div class="col-md-8">
+<div class="field form-group form-inline">
+  <h3>Submit a New Collection</h3>
+   <p class="form-control-static">We index all the collections that are in the IIIF Universe file.  Collections outside of that can be indexed by entering them (once) here.
+  You can also force indexing of your collection in Pontiiif by entering it here.</p>
+  <%= form_tag 'manifests/addcollection', method: 'get' do %>
+    <div class="form-group">
+    <%= label_tag :collection_id %>
+    <%= text_field_tag :collection, params[:collection_id] %>
+    </div>
+    <%= submit_tag :addcollection, class: 'btn btn-default'  %>
+  <% end %>
+  </div>
+  </div>
+  </div>
+  -->
 
 
-<table>
-  <thead>
-    <tr>
-      <th>Manifest</th>
-      <th>Label</th>
-      <th>Description</th>
-      <th>License</th>
-      <th>Navdate</th>
-      <th>LastIndexedDate</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+  </div>
 
-  <tbody>
-    <% @manifests.each do |manifest| %>
-      <tr>
-        <td><%= manifest.manifest_id %></td>
-        <td><%= manifest.label %></td>
-        <td><%= manifest.description %></td>
-        <td><%= manifest.license %></td>
-        <td><%= manifest.navDate %></td>
-        <td><%= manifest.lastIndexedDate %></td>
-        <td><%= link_to 'Show', manifest %></td>
-        <td><%= link_to 'Edit', edit_manifest_path(manifest) %></td>
-        <td><%= link_to 'Destroy', manifest, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Manifest', new_manifest_path %>
+  <%= render "footer" %>

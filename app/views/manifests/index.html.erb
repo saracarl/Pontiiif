@@ -1,39 +1,28 @@
-<h1>Listing manifests</h1>
+<%= render "navbar" %>
+<div id="main-container" class="container">
 
-
-  <hr>
-
-
-<table>
-  <thead>
-    <tr>
-      <th>Manifest</th>
-      <th>Label</th>
-      <th>Description</th>
-      <th>License</th>
-      <th>Navdate</th>
-      <th>LastIndexedDate</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @manifests.each do |manifest| %>
-      <tr>
-        <td><%= manifest.manifest_id %></td>
-        <td><%= manifest.label %></td>
-        <td><%= manifest.description %></td>
-        <td><%= manifest.license %></td>
-        <td><%= manifest.navDate %></td>
-        <td><%= manifest.lastIndexedDate %></td>
-        <td><%= link_to 'Show', manifest %></td>
-        <td><%= link_to 'Edit', edit_manifest_path(manifest) %></td>
-        <td><%= link_to 'Destroy', manifest, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+      <div class="row">
+      <div class="col-md-8">
+  <% if @manifests.blank? %>
+    <div class="row">
+    <div class="col-md-8">
+    <p>No results found</p>
+    </div>
+    </div>
+  <% end %> 
+  <% @manifests.each do |manifest| %>
+  <div class="row">
+      <div class="col-md-8">
+        <h4><%= manifest.label %></td></h4>
+        <p><%= manifest.manifest_id %></td></p>
+        <p><%= manifest.license %></p>
+        <p><%= manifest.license_raw %></p>
+        <p><%= raw(manifest.description) %></td></p>
+      </div>
+    </div>
     <% end %>
-  </tbody>
-</table>
-
+    </div>
+    </div>
 <br>
 
-<%= link_to 'New Manifest', new_manifest_path %>
+</div>

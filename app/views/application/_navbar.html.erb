@@ -1,0 +1,9 @@
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container">
+  	  <%= image_tag("WinchesterBibleP.jpg", alt: "Illuminated P", class: "navbar-brand") %>	
+      <%= link_to "Pontiiif", search_path, class: "navbar-brand" %>
+      <%= link_to "Advanced Search", advanced_search_path, class: "navbar-nav" %>
+      <%= link_to "Add a Collection", new_collection_path, class: "navbar-nav" %>
+      <%= link_to "View Log Files", list_logs_path, class: "navbar-nav" %>
+  </div>
+</nav>
