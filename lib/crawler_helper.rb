@@ -50,7 +50,10 @@ module CrawlerHelper
         new_manifest.description = service.description
       end
       if service.license
+        new_manifest.license = service.license
         new_manifest.raw_license = service.license
+        new_manifest.raw_license2 = service.license
+        new_manifest.raw_license3 = service.license
       end
       if service["nav_date"]  
         new_manifest.navDate = service["nav_date"]
