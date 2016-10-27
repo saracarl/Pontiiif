@@ -57,20 +57,20 @@ class ManifestsController < ApplicationController
       startTime = Time.new(params["startDate"]).utc
       endTime = Time.new(params["endDate"]).utc
       endTime=endTime+1.year
-      date_range = {range: {navDate: {"gte": startTime, "lte": endTime}}} 
+      date_range = {range: {navDate: {gte: startTime, lte: endTime}}} 
       must_array << date_range
     end
     #startDate no endDate
     if !params["startDate"].blank? && params["endDate"].blank? then
       startTime = Time.new(params["startDate"]).utc
-      date_range = {range: {navDate: {"gte": startTime}}} 
+      date_range = {range: {navDate: {gte: startTime}}} 
       must_array << date_range
     end
     #endDate no startDate
     if params["startDate"].blank? && !params["endDate"].blank? then
       endTime = Time.new(params["endDate"]).utc
       endTime=endTime+1.year
-      date_range = {range: {navDate: {"lte": endTime}}} 
+      date_range = {range: {navDate: {lte: endTime}}} 
       must_array << date_range
     end
     #TODO if params["endDate"] then endDate =
