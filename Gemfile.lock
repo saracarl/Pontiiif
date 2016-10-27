@@ -204,6 +204,7 @@ DEPENDENCIES
   bootstrap-sass (~> 3.2.0)
   coffee-rails (~> 4.0.0)
   elasticsearch-dsl
+  elasticsearch-model
   elasticsearch-persistence
   iiif-presentation!
   jbuilder (~> 2.0)

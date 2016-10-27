@@ -51,9 +51,6 @@ module CrawlerHelper
       end
       if service.license
         new_manifest.license = service.license
-        new_manifest.raw_license = service.license
-        new_manifest.raw_license2 = service.license
-        new_manifest.raw_license3 = service.license
       end
       if service["nav_date"]  
         new_manifest.navDate = service["nav_date"]
@@ -94,7 +91,7 @@ module CrawlerHelper
       rescue Exception => e
         log_error(e,collection)
       else
-        # TODO add the below back in to keep from reparsing an already included collection
+        # TODO add something to keep from reparsing an already included collection
         # you can have service.collections or service.manifests here 
         # if a collection, call this again
         service.collections.each do |collection|

@@ -1,0 +1,25 @@
+{
+"settings": {
+"index": {
+"number_of_shards": 3,
+"number_of_replicas": 1,
+      "analysis":{
+        "analyzer":{
+          "url_analyzer":{
+            "type":"custom",
+            "tokenizer":"uax_url_email"
+          }
+        }
+      }
+}},
+  "mappings": {
+    "index" : {
+      "properties" : {
+        "license" : {
+          "type" :    "string",
+          "analyzer": "url_analyzer"
+        }
+      }
+    }
+  }
+}
