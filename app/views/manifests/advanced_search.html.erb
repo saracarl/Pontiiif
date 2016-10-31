@@ -20,7 +20,7 @@
     <%= text_field_tag :metadata, params[:metadata], class: 'form-control' %>
         </div>
     <div class="form-group">
-    <%= collection_select(:license, :license_id, @licenses, :to_s, :to_s, class: 'form-control') %>
+    <%= collection_select(:license, :license_id, @licenses, :to_s, :to_s, include_blank: true, class: 'form-control') %>
     </div>
     <div class="form-group">
     <%= label_tag :start_Year %>
