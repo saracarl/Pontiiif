@@ -89,7 +89,7 @@ module CrawlerHelper
       begin
         service = IIIF::Service.parse(collection_json)
       rescue Exception => e
-        log_error(e,collection)
+        LoggerHelper.log_error(e,collection)
       else
         # TODO add something to keep from reparsing an already included collection
         # you can have service.collections or service.manifests here 
