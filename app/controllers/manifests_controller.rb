@@ -31,13 +31,16 @@ class ManifestsController < ApplicationController
    end
 
   def addcollection
-    #CrawlerHelper.ingest_collection(params[:collection])
-    #render action: "search"
-
     rake_call = "rake pontiiif:ingest_collection[" + params[:collection] +"]  --trace 2>&1 >> rake_log.log &"
     logger.info rake_call
     system(rake_call)
-    render action: "search"
+    render action: "addedcollection"
+  end
+
+  def advanced_search
+    query = {size: 0, aggs: {licenses: {terms: { field: "license" }}}}
+    @query_results = Manifest.search(query)
+    @licenses = @query_results.response["aggregations"]["licenses"]["buckets"].map { |h| h["key"] }
   end
 
   def advancedsearch
@@ -73,12 +76,13 @@ class ManifestsController < ApplicationController
       date_range = {range: {navDate: {lte: endTime}}} 
       must_array << date_range
     end
-    #TODO if params["endDate"] then endDate =
-    # probably need to make sure the above actually has an endDate
-    # if only one date, use for both start and end date?  or go to "beginning" and "current time"? 
     if !params["metadata"].blank? then 
       metadata_match = {match: {metadata: params["metadata"]}} 
       must_array << metadata_match
+    end
+    if !params["license"].blank? then 
+      license_match = {match: {license: params["license"]["license_id"]}} 
+      must_array << license_match
     end
     bool_clause = {bool: {must: must_array}}
     query = {query: bool_clause}

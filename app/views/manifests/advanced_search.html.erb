@@ -19,10 +19,9 @@
     <%= label_tag :metadata %>
     <%= text_field_tag :metadata, params[:metadata], class: 'form-control' %>
         </div>
-    <div class="form-group">    
-    <%= label_tag :license %>
-    <%= text_field_tag :license, params[:license], class: 'form-control' %>
-        </div>
+    <div class="form-group">
+    <%= collection_select(:license, :license_id, @licenses, :to_s, :to_s, class: 'form-control') %>
+    </div>
     <div class="form-group">
     <%= label_tag :start_Year %>
     <%= text_field_tag :startDate, params[:startDate], placeholder: "1800 or +1800 or -300 or blank", class: 'form-control' %>
