@@ -13,6 +13,7 @@ Pontiiif also includes a web UI that allows simple searching across all indexed 
 
 ## What it doesn't do
 Pontiiif does not ingest data from annotationLists or layers attached to manifests.
+
 If we have any trouble parsing or storing the metadata field we skip the metadata but do store the rest of the manifest.  (Errors are logged.)
 
 ## Installation
