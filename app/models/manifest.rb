@@ -14,6 +14,7 @@ class Manifest
   attribute :lastIndexedDate, Date
   attribute :metadata, String
   attribute :domain, String
+  attribute :thumbnail, String
 
   mapping do
   # 	indexes :manifest_id,	:index => :uax_url_email

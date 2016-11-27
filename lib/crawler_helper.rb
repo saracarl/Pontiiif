@@ -46,6 +46,7 @@ module CrawlerHelper
       new_manifest.manifest_id = service['@id']
       new_manifest.domain = URI.parse(manifest).host.downcase
       new_manifest.label = service.label
+      new_manifest.thumbnail = service.thumbnail
       if service.description
         new_manifest.description = service.description
       end

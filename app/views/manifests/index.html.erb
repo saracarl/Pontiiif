@@ -13,10 +13,11 @@
   <% @manifests.each do |manifest| %>
   <div class="row">
       <div class="col-md-8">
-        <h4><%= manifest.label %></td></h4>
-        <p><%= manifest.manifest_id %></td></p>
+        <h4><%= manifest.label %></h4>
+        <p><%= manifest.manifest_id %></p>
         <p><%= manifest.license %></p>
-        <p><%= raw(manifest.description) %></td></p>
+        <p><%= raw(manifest.description) %></p>
+        <p><%= image_tag manifest.thumbnail %></p>
       </div>
     </div>
     <% end %>
