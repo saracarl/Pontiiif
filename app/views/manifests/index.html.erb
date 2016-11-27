@@ -18,6 +18,9 @@
         <p><%= manifest.license %></p>
         <p><%= raw(manifest.description) %></p>
         <p><%= image_tag manifest.thumbnail %></p>
+        <p><a target=”_blank” href="http://universalviewer.io/examples/?manifest=<%= manifest.manifest_id %>">
+    <%= image_tag 'logo-iiif.png'%>
+</a></p>
       </div>
     </div>
     <% end %>
