@@ -60,20 +60,20 @@ class ManifestsController < ApplicationController
       startTime = Time.new(params["startDate"]).utc
       endTime = Time.new(params["endDate"]).utc
       endTime=endTime+1.year
-      date_range = {range: {navDate: {gte: startTime, lte: endTime}}} 
+      date_range = {range: {nav_date: {gte: startTime, lte: endTime}}} 
       must_array << date_range
     end
     #startDate no endDate
     if !params["startDate"].blank? && params["endDate"].blank? then
       startTime = Time.new(params["startDate"]).utc
-      date_range = {range: {navDate: {gte: startTime}}} 
+      date_range = {range: {nav_date: {gte: startTime}}} 
       must_array << date_range
     end
     #endDate no startDate
     if params["startDate"].blank? && !params["endDate"].blank? then
       endTime = Time.new(params["endDate"]).utc
       endTime=endTime+1.year
-      date_range = {range: {navDate: {lte: endTime}}} 
+      date_range = {range: {nav_date: {lte: endTime}}} 
       must_array << date_range
     end
     if !params["metadata"].blank? then 
@@ -136,6 +136,31 @@ class ManifestsController < ApplicationController
     end
   end
 
+
+  def api_search
+    @manifests = Manifest.search(params[:query])
+    collection = IIIF::Presentation::Collection.new
+    collection['@id'] = api_search_path({:query => params[:query], :only_path => false})
+    collection.label = "IIIF resources discovered by searching the Pontiiif installation at for '#{params[:query]}' at #{Time.now}"
+    
+    @manifests.each do |db_manifest|
+      seed = { 
+        '@id' => db_manifest.manifest_id, 
+        'label' => db_manifest.label,
+        'description' => db_manifest.description
+      }
+      manifest = IIIF::Presentation::Manifest.new(seed)
+      manifest.metadata = db_manifest.metadata if db_manifest.metadata
+      manifest.thumbnail = db_manifest.thumbnail if db_manifest.thumbnail  
+      manifest.license = db_manifest.license if db_manifest.license
+      
+      collection.manifests << manifest 
+    end
+
+    render :text => collection.to_json(pretty: true), :content_type => "application/json"
+
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_manifest
@@ -144,6 +169,6 @@ class ManifestsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def manifest_params
-      params.require(:manifest).permit(:manifest_id, :label, :description, :license, :navDate)
+      params.require(:manifest).permit(:manifest_id, :label, :description, :license, :nav_date)
     end
 end

@@ -7,7 +7,7 @@ RSpec.describe "manifests/new", :type => :view do
       :label => "",
       :description => "",
       :license => "",
-      :navDate => ""
+      :nav_date => ""
     ))
   end
 
@@ -24,7 +24,7 @@ RSpec.describe "manifests/new", :type => :view do
 
       assert_select "input#manifest_license[name=?]", "manifest[license]"
 
-      assert_select "input#manifest_navDate[name=?]", "manifest[navDate]"
+      assert_select "input#manifest_nav_date[name=?]", "manifest[nav_date]"
     end
   end
 end
