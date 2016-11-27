@@ -14,13 +14,15 @@
   <div class="row">
       <div class="col-md-8">
         <h4><%= manifest.label %></h4>
-        <p><%= manifest.manifest_id %></p>
+        <p>
+          <a target=”_blank” href="http://universalviewer.io/examples/?manifest=<%= manifest.manifest_id %>">
+            <%= image_tag 'logo-iiif.png', :alt => 'Drag onto an IIIF client or click to open in Universal Viewer'%>
+          </a>
+          <%= link_to manifest.manifest_id, manifest.manifest_id %>
+        </p>
         <p><%= manifest.license %></p>
         <p><%= raw(manifest.description) %></p>
         <p><%= image_tag manifest.thumbnail %></p>
-        <p><a target=”_blank” href="http://universalviewer.io/examples/?manifest=<%= manifest.manifest_id %>">
-    <%= image_tag 'logo-iiif.png'%>
-</a></p>
       </div>
     </div>
     <% end %>
