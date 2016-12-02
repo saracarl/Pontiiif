@@ -45,9 +45,18 @@ module CrawlerHelper
       new_manifest = Manifest.new
       new_manifest.manifest_id = service['@id']
       new_manifest.domain = URI.parse(manifest).host.downcase
-      new_manifest.label = service.label
+      if !service.label.kind_of? String
+         new_manifest.label = JSON.parse(service.label.to_json.gsub("@",""))
+      else
+        new_manifest.label = service.label
+      end
       if service.description
-        new_manifest.description = service.description
+        #binding.pry
+        if !service.description.kind_of? String
+         new_manifest.description = JSON.parse(service.description.to_json.gsub("@",""))
+        else
+          new_manifest.description = {"value"=>service.description}
+        end
       end
       if service.license
         new_manifest.license = service.license
@@ -64,6 +73,12 @@ module CrawlerHelper
       # elasticsearch has trouble with some metadata formating, so save it separately to catch issues without throwing away the entire manifest
       if service["metadata"]
         new_manifest.metadata = service["metadata"]
+=begin        if !service["metadata"].kind_of? String
+          new_manifest.metadata = service["metadata"].to_json.gsub("@","")
+        else
+          new_manifest.metadata = service["metadata"]
+        end
+=end
       end
       begin
         new_manifest.save
