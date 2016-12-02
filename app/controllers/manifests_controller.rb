@@ -80,7 +80,7 @@ class ManifestsController < ApplicationController
       metadata_match = {match: {metadata: params["metadata"]}} 
       must_array << metadata_match
     end
-    if !params["license"].blank? then 
+    if !params["license"]["license_id"].blank? then 
       license_match = {match: {license: params["license"]["license_id"]}} 
       must_array << license_match
     end
