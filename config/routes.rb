@@ -12,6 +12,8 @@ Rails.application.routes.draw do
   get   '/list_logs' => 'log_files#list_logs', :as => "list_logs"
   get   '/log_files/:logfile', to: 'log_files#show', :as => "logfile"
   get   'addedcollection' => 'manifests#addedcollection'
+  
+  get   'api/v0.0/search/:query' => 'manifests#api_search', :as => "api_search"
  # get #'/patients/:id', to: 'patients#show', as: 'patient'
 
   # The priority is based upon order of creation: first created -> highest priority.

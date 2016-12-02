@@ -1,7 +1,7 @@
 module LoggerHelper
   require 'date'
   LOG_DIR = File.join(Rails.root, "tmp", "logs")
-  unless Dir.exist?(LOG_DIR) then Dir.mkdir(LOG_DIR) end
+  unless Dir.exist?(LOG_DIR) then FileUtils.mkdir_p(LOG_DIR) end
   def self.log_error(e, manifest) 
     # get domain of manifest
     host = URI.parse(manifest).host.downcase

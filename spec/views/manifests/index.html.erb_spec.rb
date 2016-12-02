@@ -8,14 +8,14 @@ RSpec.describe "manifests/index", :type => :view do
         :label => "",
         :description => "",
         :license => "",
-        :navDate => ""
+        :nav_date => ""
       ),
       Manifest.create!(
         :manifest_id => "",
         :label => "",
         :description => "",
         :license => "",
-        :navDate => ""
+        :nav_date => ""
       )
     ])
   end

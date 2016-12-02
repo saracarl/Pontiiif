@@ -50,6 +50,7 @@ module CrawlerHelper
       else
         new_manifest.label = service.label
       end
+      new_manifest.thumbnail = service.thumbnail
       if service.description
         #binding.pry
         if !service.description.kind_of? String
@@ -62,9 +63,9 @@ module CrawlerHelper
         new_manifest.license = service.license
       end
       if service["nav_date"]  
-        new_manifest.navDate = service["nav_date"]
+        new_manifest.nav_date = service["nav_date"]
       end
-      new_manifest.lastIndexedDate = DateTime.now
+      new_manifest.last_indexed_date = DateTime.now
       begin
         new_manifest.save
       rescue StandardError=>e
@@ -113,7 +114,7 @@ module CrawlerHelper
         	puts("this is collection " + collection["@id"])
           new_collection = Collection.new
           new_collection.collection_id = collection['@id']
-          new_collection.lastIndexedDate = DateTime.now
+          new_collection.last_indexed_date = DateTime.now
           new_collection.save
         	ingest_collection(collection["@id"])
         end

@@ -10,10 +10,11 @@ class Manifest
  # attribute :raw_license2, String, mapping: { index: 'not_analyzed'}
    attribute :raw_license2, String
   attribute :raw_license3, String
-  attribute :navDate,     Date
-  attribute :lastIndexedDate, Date
+  attribute :nav_date,     Date
+  attribute :last_indexed_date, Date
   attribute :metadata, String
   attribute :domain, String
+  attribute :thumbnail, String
 
   mapping do
   # 	indexes :manifest_id,	:index => :uax_url_email
