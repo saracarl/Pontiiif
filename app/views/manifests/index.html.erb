@@ -21,8 +21,14 @@
           <%= link_to manifest.manifest_id, manifest.manifest_id %>
         </p>
         <p><%= manifest.license %></p>
-        <p><%= raw(manifest.description) %></p>
-        <p><%= image_tag manifest.thumbnail %></p>
+        <p>
+        <% manifest.description.each do |description_hash| %>
+          <%= raw(description_hash["value"]) %> <br>
+        <% end %>
+        </p>
+        <% if manifest.thumbnail %>
+          <p><%= image_tag manifest.thumbnail %></p>
+        <% end %>
       </div>
     </div>
     <% end %>

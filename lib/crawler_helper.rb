@@ -41,10 +41,19 @@ module CrawlerHelper
       new_manifest = Manifest.new
       new_manifest.manifest_id = service['@id']
       new_manifest.domain = URI.parse(manifest).host.downcase
-      new_manifest.label = service.label
+      if !service.label.kind_of? String
+         new_manifest.label = JSON.parse(service.label.to_json.gsub("@",""))
+      else
+        new_manifest.label = service.label
+      end
       new_manifest.thumbnail = service.thumbnail
       if service.description
-        new_manifest.description = service.description
+        #binding.pry
+        if !service.description.kind_of? String
+         new_manifest.description = JSON.parse(service.description.to_json.gsub("@",""))
+        else
+          new_manifest.description = [{"value"=>service.description}]
+        end
       end
       if service.license
         new_manifest.license = service.license
@@ -60,7 +69,14 @@ module CrawlerHelper
       end
       # elasticsearch has trouble with some metadata formating, so save it separately to catch issues without throwing away the entire manifest
       if service["metadata"]
-        new_manifest.metadata = service["metadata"]
+#        binding.pry
+        new_manifest.metadata = expand_array(service["metadata"])
+=begin        if !service["metadata"].kind_of? String
+          new_manifest.metadata = service["metadata"].to_json.gsub("@","")
+        else
+          new_manifest.metadata = service["metadata"]
+        end
+=end
       end
       begin
         new_manifest.save
@@ -69,6 +85,68 @@ module CrawlerHelper
       end
     end
   end   
+
+  def self.expand_element(complex_element)
+    new_hashes = []
+    clean_prototype = complex_element.reject{|k,v| v.is_a? Array}
+    # invert the hash
+    complex_element.invert.each_pair do |k,v|
+      # for each key
+      # p k
+      if k.is_a? Array
+        # if an array, then for each element
+        k.each do |simple_hash|
+          # append a new hash
+          new_simple_hash = simple_hash.clone
+          new_simple_hash[v] = simple_hash["@value"]
+          new_simple_hash.delete("@value")
+          new_hashes << new_simple_hash.merge(clean_prototype) 
+        end
+      end
+    end
+    new_hashes
+  end
+
+  def self.contains_array?(complex_element)
+    complex_element.values.detect{|value| value.is_a? Array}
+  end
+
+
+  def self.contains_arrays_with_hashes?(complex_element)
+    complex_element.values.detect{ |value| (value.is_a?(Array) && value.first.is_a?(Hash)) }    
+  end
+
+  def self.array_has_hashes?(array)
+    array.detect{|value| value.is_a? Hash}
+  end
+
+  def self.consolidate_element(element)
+    new_hash = {}
+    element.each_pair do |k,v|
+      if v.is_a? Array
+        new_hash[k] = v.join(', ')
+      else
+        new_hash[k] = v
+      end
+    end
+    new_hash
+  end
+
+  def self.expand_array(original_array)
+    new_array = []
+    original_array.each do |element|
+      if contains_array?(element)
+        if contains_arrays_with_hashes?(element)
+          new_array += expand_element(element)
+        else
+          new_array << consolidate_element(element)
+        end
+      else 
+        new_array << element
+      end
+    end
+    new_array
+  end
 
   def self.ingest_collection(collection)
     begin
