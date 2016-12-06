@@ -1,39 +1,39 @@
 <%= render "navbar" %>
 <div id="main-container" class="container">
 
-      <div class="row">
-      <div class="col-md-8">
-  <% if @manifests.blank? %>
-    <div class="row">
-    <div class="col-md-8">
-    <p>No results found</p>
-    </div>
-    </div>
-  <% end %> 
-  <% @manifests.each do |manifest| %>
-  <div class="row">
-      <div class="col-md-8">
-        <h4><%= manifest.label %></h4>
-        <p>
-          <a target=”_blank” href="http://universalviewer.io/examples/?manifest=<%= manifest.manifest_id %>">
+    <hgroup class="mb20">
+    <h1>Search Results</h1>
+    <% if @manifests.count == 1 %>
+    <h2 class="lead"><strong class="text-danger"><%= @manifests.count %></strong> result was found.</h2>
+    <% elsif @manifests.count == 0 %>
+        <h2 class="lead"><strong class="text-danger">No results found.</h2>
+    <% else %>    
+    <h2 class="lead"><strong class="text-danger"><%= @manifests.count %></strong> results were found.</h2>   
+    <% end %>            
+  </hgroup>
+
+    <section class="col-xs-12 col-sm-6 col-md-12">
+   <% @manifests.each do |manifest| %>   
+    <article class="search-result row">
+      <div class="col-xs-12 col-sm-12 col-md-2">
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-7 excerpet">
+        <h3><a href="http://universalviewer.io/examples/?manifest=<%= manifest.manifest_id %>" title=""><%= manifest.label %></a></h3>
+        <p>        <% manifest.description.each do |description_hash| %>
+          <%= raw(description_hash["value"]) %> <br>
+        <% end %>
+        </p>  
+        <p><%= manifest.license %></p>       
+                <a target=”_blank” href="http://universalviewer.io/examples/?manifest=<%= manifest.manifest_id %>">
             <%= image_tag 'logo-iiif.png', :alt => 'Drag onto an IIIF client or click to open in Universal Viewer'%>
           </a>
           <%= link_to manifest.manifest_id, manifest.manifest_id %>
-        </p>
-        <p><%= manifest.license %></p>
-        <p>
-        <% manifest.description.each do |description_hash| %>
-          <%= raw(description_hash["value"]) %> <br>
-        <% end %>
-        </p>
-        <% if manifest.thumbnail %>
-          <p><%= image_tag manifest.thumbnail %></p>
-        <% end %>
       </div>
-    </div>
+      <span class="clearfix borda"></span>
+    </article>
     <% end %>
-    </div>
-    </div>
+
+  
 <br>
 
 </div>
