@@ -6,8 +6,6 @@ class Manifest
   attribute :description, String
   attribute :raw_license,     String
   attribute :license,     String
-  #attribute :license, String, mapping: { index: { analysis: { analyzer: "url_analyzer" } } }
- # attribute :raw_license2, String, mapping: { index: 'not_analyzed'}
    attribute :raw_license2, String
   attribute :raw_license3, String
   attribute :nav_date,     Date
@@ -16,16 +14,7 @@ class Manifest
   attribute :domain, String
   attribute :thumbnail, String
 
-  mapping do
-  # 	indexes :manifest_id,	:index => :uax_url_email
-  #  	indexes :domain,    	:index => :uax_url_email
-  #  	indexes	:license,		:index => :uax_url_email
-  #indexes :license, analyzer: "url_analyzer"
-  #  	#indexes :raw_license,	:index => :uax_url_email
-  #  	#indexes :raw_license2,	:index => :not_analyzed
-  #  	indexes :raw_license3,	:index => :not_analyzed
-  end
-
+  # The ActiveRecord pattern for the ElasticSearch Persistence gem doesn't automatically manage indexes
 
 
 end

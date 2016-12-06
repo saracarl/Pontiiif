@@ -14,25 +14,21 @@ module CrawlerHelper
         parse_manifest(manifest, manifest_json) 
       end
     else
-      puts "manifest " + manifest + "has already been processed.  Not reprocessing."
+      puts "manifest " + manifest + " has already been processed.  Not reprocessing."
     end
   end
 
   def self.manifest_already_exists(manifest)
-    if true #change this by passing some sort of variable  FORCE_REINGEST
-      return false
-    else
-      definition = Elasticsearch::DSL::Search.search { 
-        query do 
-              match manifest_id: manifest
-        end
-      }
-      first_manifest = Manifest.search(definition.to_hash).first
-      if first_manifest.nil? then
-        false
-      else
-        first_manifest.manifest_id.eql? manifest
+    definition = Elasticsearch::DSL::Search.search do 
+      query do 
+        term manifest_id: manifest
       end
+    end
+    first_manifest = Manifest.search(definition.to_hash).first
+    if first_manifest.nil? then
+      false
+    else
+      first_manifest.manifest_id.eql? manifest
     end
   end
 
@@ -96,7 +92,7 @@ module CrawlerHelper
         # you can have service.collections or service.manifests here 
         # if a collection, call this again
         service.collections.each do |collection|
-        	puts("this is collection " + collection["@id"])
+        	puts("collection " + collection["@id"])
           new_collection = Collection.new
           new_collection.collection_id = collection['@id']
           new_collection.last_indexed_date = DateTime.now
@@ -105,7 +101,7 @@ module CrawlerHelper
         end
         # if a manifest, call ingest_manifest
         service.manifests.each do |manifest|
-        	puts("this is manifest " + manifest["@id"])
+        	puts("manifest " + manifest["@id"])
     		  CrawlerHelper.ingest_manifest(manifest["@id"])
         end
       end
