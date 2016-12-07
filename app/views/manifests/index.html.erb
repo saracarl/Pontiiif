@@ -19,10 +19,12 @@
       </div>
       <div class="col-xs-12 col-sm-12 col-md-7 excerpet">
         <h3><a href="http://universalviewer.io/examples/?manifest=<%= manifest.manifest_id %>" title=""><%= manifest.label %></a></h3>
-        <p>        <% manifest.description.each do |description_hash| %>
-          <%= raw(description_hash["value"]) %> <br>
-        <% end %>
-        </p>  
+        <% if manifest.description %>
+          <p>        <% manifest.description.each do |description_hash| %>
+            <%= raw(description_hash["value"]) %> <br>
+         <% end %>
+         </p>  
+         <% end %>
         <p><%= manifest.license %></p>       
                 <a target=”_blank” href="http://universalviewer.io/examples/?manifest=<%= manifest.manifest_id %>">
             <%= image_tag 'logo-iiif.png', :alt => 'Drag onto an IIIF client or click to open in Universal Viewer'%>
