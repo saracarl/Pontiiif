@@ -199,6 +199,31 @@ module CrawlerHelper
       collection_record.index_finished = DateTime.now
       collection_record.save
     end
-
+  end
+  
+  # some collections must be added manually
+  BLACKLIST=[
+    'https://iiif.archivelab.org/iiif/collection.json',
+    'http://showcase.iiif.io/shims/chroniclingamerica/prezi/top.json'
+  ]
+  def self.populate_from_universe
+    # executed from command-line; errors should bubble up    
+    universe_id = 'https://raw.githubusercontent.com/ryanfb/iiif-universe/gh-pages/iiif-universe.json'
+    connection = open(universe_id, :allow_redirections => :safe)
+    collection_json = connection.read
+    service = IIIF::Service.parse(collection_json)
+    service.collections.each do |collection|
+      collection_id = collection["@id"]
+      if BLACKLIST.include?(collection_id) 
+        puts("collection #{collection_id} is blacklisted and must be added manually")
+      else
+        if Collection.find_by_at_id(collection_id)
+          puts("collection #{collection_id} is already in the database")
+        else
+          puts("adding #{collection_id}")          
+          Collection.create(:collection_id => collection_id)
+        end
+      end
+    end
   end
 end
