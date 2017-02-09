@@ -35,12 +35,16 @@ module CrawlerHelper
   def self.parse_manifest(manifest, manifest_json)
     begin
       service = IIIF::Service.parse(manifest_json)
+      unless service.is_a? IIIF::Presentation::Manifest
+        raise StandardError.new("IIIF::Service.parse() returned #{service.class} instead of IIIF::Presentation::Manifest; skipping")
+      end
     rescue StandardError=>e
       LoggerHelper.log_error(e,manifest)
     else
       new_manifest = Manifest.new
       new_manifest.manifest_id = service['@id']
       new_manifest.domain = URI.parse(manifest).host.downcase
+      #binding.pry unless service.respond_to? :label
       if !service.label.kind_of? String
          new_manifest.label = JSON.parse(service.label.to_json.gsub("@",""))
       else
@@ -48,7 +52,6 @@ module CrawlerHelper
       end
       new_manifest.thumbnail = service.thumbnail
       if service.description
-        #binding.pry
         if !service.description.kind_of? String
          new_manifest.description = JSON.parse(service.description.to_json.gsub("@",""))
         else
@@ -149,6 +152,14 @@ module CrawlerHelper
   end
 
   def self.ingest_collection(collection)
+#    binding.pry
+    collection_record = Collection.find_by_at_id(collection)
+
+    if collection_record
+      collection_record.index_started = DateTime.now
+      collection_record.save
+    end
+    
     begin
       connection = open(collection, :allow_redirections => :safe)
     rescue Exception => e
@@ -171,10 +182,10 @@ module CrawlerHelper
         # if a collection, call this again
         service.collections.each do |collection|
         	puts("collection " + collection["@id"])
-          new_collection = Collection.new
-          new_collection.collection_id = collection['@id']
-          new_collection.last_indexed_date = DateTime.now
-          new_collection.save
+          # new_collection = Collection.new
+          # new_collection.collection_id = collection['@id']
+          # new_collection.last_indexed_date = DateTime.now
+          # new_collection.save
         	ingest_collection(collection["@id"])
         end
         # if a manifest, call ingest_manifest
@@ -183,6 +194,11 @@ module CrawlerHelper
     		  CrawlerHelper.ingest_manifest(manifest["@id"])
         end
       end
-	end
+  	end
+    if collection_record
+      collection_record.index_finished = DateTime.now
+      collection_record.save
+    end
+
   end
 end

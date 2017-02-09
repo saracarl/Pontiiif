@@ -31,6 +31,13 @@ class ManifestsController < ApplicationController
    end
 
   def addcollection
+    collection_id = params[:collection]
+    binding.pry
+    collection = Collection.find_by_at_id(collection_id)
+    unless collection
+      Collection.create(:collection_id => collection_id)
+    end
+
     rake_call = "rake pontiiif:ingest_collection[" + params[:collection] +"]  --trace 2>&1 >> rake_log.log &"
     logger.info rake_call
     system(rake_call)
