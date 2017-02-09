@@ -32,7 +32,6 @@ class ManifestsController < ApplicationController
 
   def addcollection
     collection_id = params[:collection]
-    binding.pry
     collection = Collection.find_by_at_id(collection_id)
     unless collection
       Collection.create(:collection_id => collection_id)
