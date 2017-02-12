@@ -1,20 +1,60 @@
 <%= render "navbar" %>
 <div id="main-container" class="container">
 
-     <div class="row">
-      <div class="col-md-8">
-<div class="field form-group form-inline">
-  <h3>Submit a New Collection</h3>
-   <p class="form-control-static">We index all the collections that are in the IIIF Universe file.  Collections outside of that can be indexed by entering them (once) here.
-  You can also force indexing of your collection in Pontiiif by entering it here.</p>
-  <%= form_tag({controller: 'manifests', action:'addcollection'}, method: 'get') do %>
-    <div class="form-group">
-    <%= label_tag :collection_id %>
-    <%= text_field_tag :collection, params[:collection_id] %>
+  <div class="row">
+    <div class="col-md-8">
+      <div class="field form-group form-inline">
+        <h3>Submit a New Collection</h3>
+        <p class="form-control-static">
+          We index all the collections that are in the IIIF Universe file.  Collections outside of that can be indexed by entering them (once) here.
+          You can also force indexing of your collection in Pontiiif by entering it here.
+        </p>
+        <%= form_tag({controller: 'manifests', action:'addcollection'}, method: 'get') do %>
+          <div class="form-group">
+            <%= label_tag :collection_id %>
+            <%= text_field_tag :collection, params[:collection_id] %>
+          </div>
+          <%= submit_tag "Add", class: 'btn btn-default'  %>
+        <% end %>
+      </div>
     </div>
-    <%= submit_tag :addcollection, class: 'btn btn-default'  %>
-  <% end %>
   </div>
-  </div>
+  <div class="row">
+    <div class="col-md-8">
+      <div class="field form-group form-inline">
+        <p>Collections being indexed</p>
+        <table class='table'>
+          <thead>
+            <tr>
+              <td>
+                ID
+              </td>
+              <td>
+                Started
+              </td>
+              <td>
+                Ended
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            <% Collection.all.each do |collection| %>
+              <tr>
+                <td>
+                  <%= collection.collection_id%>
+                </td>
+                <td>
+                  <%= collection.index_started %>
+                </td>
+                <td>
+                  <%= collection.index_finished %>
+                </td>
+              </tr>
+            
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
