@@ -29,6 +29,8 @@ If we have any trouble parsing or storing the metadata field we skip the metadat
 9.  Run the rake task to ingest your collection  (we recommend creating a cron job if you want this to run on a regular basis)  rake pontiiif:ingest_collection[https://raw.githubusercontent.com/ryanfb/iiif-universe/gh-pages/iiif-universe.json]
 10. Check the ingestion logs in the "logs" tab in the app or the tmp/logs directory.
 
+A PontIIIF server should call `rake pontiiif:crawl_collections` on a regular basis (e.g. a weekly cron job) to refresh its search index.  This rake task will recursively crawl all collections stored by the PontIIIF server.
+
 
 ## How to Contribute
 There's lots more to be done.  If you find a problem or have a suggestion, please open an issue.  We welcome code changes in the form of pull requests, too!
